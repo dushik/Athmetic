@@ -15,6 +15,8 @@ public class WriteToFile {
 	{
 		try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(path));
+            bw.write("201571030106");  
+            bw.newLine();
             for(String con:content){
                 bw.write(con);  
                 bw.newLine();

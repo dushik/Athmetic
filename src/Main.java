@@ -13,36 +13,36 @@ import javax.script.ScriptException;
  * 
  */
 public class Main {
-    
-	static ScriptEngine jse = new ScriptEngineManager().getEngineByName("JavaScript");  
-	
+    	
 	public static void main(String[] args){
-		//System.out.println("请输入：");
-		//Scanner nu=new Scanner(System.in);
-		//int num=nu.nextInt();
 		int num=Integer.parseInt(args[0]);
-		//判断参数合法性。整数		
-		char[] operator=new char[]{'+','-','*','/'};
-		Random random=new Random();
-		ArrayList<String> expression=new ArrayList<String>();
-		for(int i=0;i<num;i++){
-			int n=random.nextInt(3)+3; //3-5个运算符
-			int[] number=new int[n+1]; 
-			String ex=new String();
-			for(int j=0;j<=n;j++){
-				number[j]=random.nextInt(100)+1; //4-5个数字
+		//判断参数合法性。整数
+		if(judge(num)){
+			char[] operator=new char[]{'+','-','*','/'};
+			Random random=new Random();
+			ArrayList<String> expression=new ArrayList<String>();
+			for(int i=0;i<num;i++){
+				int n=random.nextInt(3)+3; //3-5个运算符
+				int[] number=new int[n+1]; 
+				String ex=new String();
+				for(int j=0;j<=n;j++){
+					number[j]=random.nextInt(100)+1; //4-5个数字
+				}
+				for(int j=0;j<n;j++){
+					int s=random.nextInt(4);//随机选择某个运算符
+					ex+=String.valueOf(number[j])+String.valueOf(operator[s]);///5+4+6+9
+					if(s==3){number[j+1]=decide(number[j],number[j+1]);}
+				}
+				ex+=String.valueOf(number[n]);
+				expression.add(ex);
 			}
-			for(int j=0;j<n;j++){
-				int s=random.nextInt(4);//随机选择某个运算符
-				ex+=String.valueOf(number[j])+String.valueOf(operator[s]);///5+4+6+9
-				if(s==3){number[j+1]=decide(number[j],number[j+1]);}
-			}
-			ex+=String.valueOf(number[n]);
-			expression.add(ex);
+			WriteToFile write=new WriteToFile(
+					"ArithmeticExpression.txt",calculate(expression));
+						
 		}
-		WriteToFile write=new WriteToFile(
-				"ArithmeticExpression.txt",calculate(expression));
-		
+		else{
+			System.out.println("非法输入！");
+		}
 	}
 	/**
 	 * 随即取x,y为1-100之间，x可以整除y的y值
@@ -66,6 +66,7 @@ public class Main {
 	 * @param arrayList 
 	 * @return arrayList
 	 */
+	static ScriptEngine jse = new ScriptEngineManager().getEngineByName("JavaScript");  
 	private static ArrayList<String> calculate(ArrayList<String> arrayList){
 		ArrayList<String> ArithExpress=new ArrayList<String>();
 		for(String ax:arrayList){
@@ -79,5 +80,18 @@ public class Main {
 			}
 		}
 		return ArithExpress;
+	}
+	
+	private static boolean judge(int data){
+		if(data>=0){
+			int temp=(int)data;
+			if(temp==data)
+				return true;
+			else
+				return false;
+		}
+		else{
+			return false;
+		}
 	}
 }
